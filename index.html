@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List Inteligente</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 420px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input, select, button {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background: #667eea;
+      color: white;
+      cursor: pointer;
+      border: none;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #5563d1;
+    }
+
+    ul {
+      list-style: none;
+      margin-top: 20px;
+    }
+
+    li {
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .alta {
+      background: #e74c3c;
+    }
+
+    .media {
+      background: #f39c12;
+    }
+
+    .baixa {
+      background: #2ecc71;
+    }
+
+    .concluida {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    .acoes button {
+      margin-left: 5px;
+      padding: 6px 10px;
+      font-size: 14px;
+    }
+
+    .btn-concluir {
+      background: #27ae60;
+    }
+
+    .btn-excluir {
+      background: #c0392b;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>📝 To-Do List</h1>
+
+    <div class="form">
+      <input type="text" id="tarefa" placeholder="Digite sua tarefa">
+
+      <select id="prioridade">
+        <option value="alta">Alta</option>
+        <option value="media">Média</option>
+        <option value="baixa">Baixa</option>
+      </select>
+
+      <button onclick="adicionarTarefa()">Adicionar</button>
+    </div>
+
+    <ul id="lista"></ul>
+  </div>
+
+  <script>
+    function adicionarTarefa() {
+      const input = document.getElementById("tarefa");
+      const prioridade = document.getElementById("prioridade").value;
+      const lista = document.getElementById("lista");
+
+      if (input.value.trim() === "") {
+        alert("Digite uma tarefa!");
+        return;
+      }
+
+      const li = document.createElement("li");
+      li.classList.add(prioridade);
+
+      li.innerHTML = `
+        <span>${input.value}</span>
+        <div class="acoes">
+          <button class="btn-concluir" onclick="concluir(this)">✔</button>
+          <button class="btn-excluir" onclick="excluir(this)">✖</button>
+        </div>
+      `;
+
+      lista.appendChild(li);
+      input.value = "";
+    }
+
+    function concluir(botao) {
+      botao.parentElement.parentElement.classList.toggle("concluida");
+    }
+
+    function excluir(botao) {
+      botao.parentElement.parentElement.remove();
+    }
+  </script>
+
+</body>
+</html>
