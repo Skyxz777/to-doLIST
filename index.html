@@ -19,6 +19,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 20px;
     }
 
     .container {
@@ -72,7 +73,24 @@
       color: white;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .info-tarefa {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .texto-tarefa {
+      font-weight: bold;
+    }
+
+    .data-hora {
+      font-size: 12px;
+      margin-top: 4px;
+      opacity: 0.9;
     }
 
     .alta {
@@ -92,8 +110,12 @@
       opacity: 0.6;
     }
 
+    .acoes {
+      display: flex;
+      gap: 5px;
+    }
+
     .acoes button {
-      margin-left: 5px;
       padding: 6px 10px;
       font-size: 14px;
     }
@@ -110,58 +132,82 @@
 
 <body>
 
-  <div class="container">
-    <h1>📝 To-Do List</h1>
+<div class="container">
+  <h1>📝 To-Do List</h1>
 
-    <div class="form">
-      <input type="text" id="tarefa" placeholder="Digite sua tarefa">
+  <div class="form">
+    <input type="text" id="tarefa" placeholder="Digite sua tarefa">
 
-      <select id="prioridade">
-        <option value="alta">Alta</option>
-        <option value="media">Média</option>
-        <option value="baixa">Baixa</option>
-      </select>
+    <select id="prioridade">
+      <option value="alta">Alta</option>
+      <option value="media">Média</option>
+      <option value="baixa">Baixa</option>
+    </select>
 
-      <button onclick="adicionarTarefa()">Adicionar</button>
-    </div>
+    <!-- NOVA OPÇÃO -->
+    <input type="date" id="data">
+    <input type="time" id="hora">
 
-    <ul id="lista"></ul>
+    <button onclick="adicionarTarefa()">Adicionar</button>
   </div>
 
-  <script>
-    function adicionarTarefa() {
-      const input = document.getElementById("tarefa");
-      const prioridade = document.getElementById("prioridade").value;
-      const lista = document.getElementById("lista");
+  <ul id="lista"></ul>
+</div>
 
-      if (input.value.trim() === "") {
-        alert("Digite uma tarefa!");
-        return;
-      }
+<script>
+function adicionarTarefa() {
+  const input = document.getElementById("tarefa");
+  const prioridade = document.getElementById("prioridade").value;
+  const data = document.getElementById("data").value;
+  const hora = document.getElementById("hora").value;
+  const lista = document.getElementById("lista");
 
-      const li = document.createElement("li");
-      li.classList.add(prioridade);
+  if (input.value.trim() === "") {
+    alert("Digite uma tarefa!");
+    return;
+  }
 
-      li.innerHTML = `
-        <span>${input.value}</span>
-        <div class="acoes">
-          <button class="btn-concluir" onclick="concluir(this)">✔</button>
-          <button class="btn-excluir" onclick="excluir(this)">✖</button>
-        </div>
-      `;
+  let dataHoraTexto = "";
 
-      lista.appendChild(li);
-      input.value = "";
-    }
+  if (data || hora) {
+    const partes = data ? data.split("-") : [];
+    const dataFormatada = data
+      ? `${partes[2]}/${partes[1]}/${partes[0]}`
+      : "";
 
-    function concluir(botao) {
-      botao.parentElement.parentElement.classList.toggle("concluida");
-    }
+    dataHoraTexto = `${dataFormatada} ${hora}`.trim();
+  }
 
-    function excluir(botao) {
-      botao.parentElement.parentElement.remove();
-    }
-  </script>
+  const li = document.createElement("li");
+  li.classList.add(prioridade);
+
+  li.innerHTML = `
+    <div class="info-tarefa">
+      <span class="texto-tarefa">${input.value}</span>
+      ${dataHoraTexto ? `<span class="data-hora">📅 ${dataHoraTexto}</span>` : ""}
+    </div>
+
+    <div class="acoes">
+      <button class="btn-concluir" onclick="concluir(this)">✔</button>
+      <button class="btn-excluir" onclick="excluir(this)">✖</button>
+    </div>
+  `;
+
+  lista.appendChild(li);
+
+  input.value = "";
+  document.getElementById("data").value = "";
+  document.getElementById("hora").value = "";
+}
+
+function concluir(botao) {
+  botao.parentElement.parentElement.classList.toggle("concluida");
+}
+
+function excluir(botao) {
+  botao.parentElement.parentElement.remove();
+}
+</script>
 
 </body>
 </html>
